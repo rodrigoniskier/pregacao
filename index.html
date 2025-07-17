@@ -149,12 +149,12 @@
 
     <script>
         // Dark mode functionality
-        const darkModeIcon = document.getElementById('dark-mode-icon');
-        if (localStorage.getItem('darkMode') === 'enabled' || 
-            (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            darkModeIcon.classList.replace('fa-moon', 'fa-sun');
-        }
+        const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+if (localStorage.getItem('darkMode') === 'enabled' || 
+    (!isMobile && !('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+    darkModeIcon.classList.replace('fa-moon', 'fa-sun');
+}
 
         function toggleDarkMode() {
             if (document.documentElement.classList.toggle('dark')) {
