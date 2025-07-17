@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco de Esboços Cristocêntricos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+Pro:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-dark: #2c3e50; /* Slate Blue */
+            --accent-gold: #c5a05b; /* Muted Gold */
+            --light-bg: #fdfbf7; /* Parchment */
+            --text-dark: #333333;
+        }
+
+        body {
+            background-color: var(--light-bg);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Merriweather', serif;
+        }
+
+        p, div, span, li, button {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #34495e 100%);
+        }
+
+        .nav-active {
+            background-color: var(--accent-gold) !important;
+            color: white !important;
+            transform: translateX(5px);
+        }
+        
+        .nav-active i {
+            color: white !important;
+        }
+
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background-color: rgba(197, 160, 91, 0.1);
+            color: var(--accent-gold);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sermon-card {
+            border: 1px solid #e0dccc;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .sermon-card:hover {
+            box-shadow: 0 10px 25px rgba(44, 62, 80, 0.1);
+            border-color: var(--accent-gold);
+        }
+
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="text-text-dark">
+
+    <!-- Header -->
+    <header class="header-gradient text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-2xl md:text-3xl font-bold flex items-center">
+                        <i class="fas fa-book-open mr-3 text-accent-gold"></i>
+                        Banco de Esboços
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu fixed inset-y-0 left-0 w-80 bg-white shadow-lg z-40 md:hidden">
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-gray-800">Gêneros Bíblicos</h2>
+                <button onclick="toggleMobileMenu()" class="text-gray-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+        </div>
+        <nav class="p-4" id="mobile-nav"></nav>
+    </div>
+
+    <div class="container mx-auto flex flex-col md:flex-row mt-8 px-4 md:px-6">
+        <!-- Sidebar Desktop -->
+        <aside class="hidden md:block w-72 lg:w-80 pr-8">
+            <div class="sticky top-24">
+                <h2 class="text-2xl font-bold text-primary-dark mb-6">Gêneros Bíblicos</h2>
+                <nav class="space-y-3" id="desktop-nav"></nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <div id="content" class="fade-in">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sermon Data
+        const sermonData = {
+            introducao: {
+                title: "Introdução",
+                icon: "fas fa-info-circle",
+                content: `
+                    <div class="sermon-card rounded-xl p-8 mb-8 bg-light-bg border-2 border-accent-gold">
+                        <h2 class="text-3xl font-bold text-primary-dark mb-4">Introdução às Práticas de Pregação</h2>
+                        <p class="mb-4 text-base leading-relaxed">A pregação expositiva é um exercício de humildade, dependência e diligência diante da Palavra de Deus. Os esboços apresentados nestes cinco módulos – abrangendo Narrativas, Evangelhos, Epístolas, Poéticos e Proféticos – foram cuidadosamente elaborados à luz da tradição reformada, tendo Cristo como centro de cada etapa e aplicação.</p>
+                        <p class="mb-6 text-base leading-relaxed">No entanto, cada esboço serve como ponto de partida e não como fórmula engessada. O pregador fiel deve revisar, corrigir e adaptar cada esboço à luz de sua experiência pastoral, maturidade espiritual e, principalmente, orar para que o Espírito Santo conduza todo o processo.</p>
+                        
+                        <h3 class="text-2xl font-bold text-accent-gold mb-4">Normas Fundamentais</h3>
+                        <div class="grid md:grid-cols-2 gap-x-8 gap-y-4">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-cross text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Cristocentricidade:</strong> Toda mensagem deve apontar explicitamente para Cristo.</div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-book-bible text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Fidelidade ao Texto:</strong> A exposição deve partir do sentido original da passagem.</div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-sitemap text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Clareza Estrutural:</strong> O sermão deve ser bem construído e lógico.</div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-bullseye text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Unidade Temática:</strong> O tema governa toda a estrutura.</div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-handshake text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Linguagem Encarnada:</strong> Use uma comunicação que dialogue com a realidade do auditório.</div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-heart-pulse text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Aplicação Prática:</strong> Conecte o ensino bíblico às situações reais do povo.</div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-fire text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Preparo Espiritual:</strong> O sermão nasce na oração e depende do Espírito.</div>
+                            </div>
+                             <div class="flex items-start space-x-3">
+                                <i class="fas fa-pen-to-square text-accent-gold mt-1"></i>
+                                <div><strong class="text-primary-dark">Autoavaliação e Revisão:</strong> Sempre revise o esboço buscando aprimoramento.</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            narrativas: {
+                title: "Narrativas",
+                icon: "fas fa-scroll",
+                sermons: [
+                    {
+                        title: "Gênesis 22:1-14 | O Sacrifício de Isaque",
+                        theme: "O Cordeiro Providenciado por Deus",
+                        ict: "Deus apontou para Cristo ao substituir Isaque por um cordeiro, revelando Seu amor sacrificial.",
+                        thesis: "Deus apontará para Cristo em toda provação, revelando seu amor sacrificial ao prover o Cordeiro perfeito.",
+                        purpose: "Convidar os ouvintes a confiar e descansar no sacrifício perfeito de Cristo em meio às provações.",
+                        question: "Como Deus revelou Cristo no sacrifício de Isaque?",
+                        points: [
+                            "A provação de Abraão aponta para o Pai que entrega o Filho (v.1-2)",
+                            "A obediência de Abraão prefigura a submissão de Cristo ao Pai (v.3-10)",
+                            "O Cordeiro substituto revela Cristo como sacrifício definitivo (v.11-14)"
+                        ],
+                        application: "Não somos salvos por nossa fé ou obediência, mas pelo sacrifício do Cordeiro. Em cada provação, olhe para Cristo – Deus já proveu o sacrifício."
+                    },
+                    {
+                        title: "Êxodo 14:10-31 | A Travessia do Mar Vermelho",
+                        theme: "Cristo, o Libertador que abre caminho",
+                        ict: "Deus libertou Israel da escravidão pelo poder do seu braço, prefigurando a libertação definitiva em Cristo.",
+                        thesis: "Deus libertará seu povo da escravidão do pecado, por meio de Cristo, nosso Libertador.",
+                        purpose: "Levar a igreja a confiar totalmente em Cristo, que abriu o caminho da salvação na cruz.",
+                        question: "Como o livramento do Mar Vermelho aponta para Cristo?",
+                        points: [
+                            "O povo sem esperança aponta para nossa incapacidade diante do pecado (v.10-12)",
+                            "O mediador de Deus antecipa Cristo, nosso intercessor (v.13-16)",
+                            "A passagem pelo mar prefigura a vitória de Cristo sobre a morte (v.21-31)"
+                        ],
+                        application: "A salvação é obra de Deus, realizada em Cristo. Ele abriu o caminho: 'Eu sou o caminho' (Jo 14:6)."
+                    },
+                    {
+                        title: "1 Samuel 17:1-50 | Davi e Golias",
+                        theme: "Cristo, o Campeão que venceu nosso maior inimigo",
+                        ict: "Deus salvou Israel derrotando Golias por meio do seu ungido, apontando para Cristo que venceu o pecado e a morte.",
+                        thesis: "Deus salva sua igreja através de Cristo, o verdadeiro Campeão, que venceu o pecado e a morte em nosso lugar.",
+                        purpose: "Levar a igreja a confiar na vitória já conquistada por Cristo, não em nossa própria força.",
+                        question: "Como Davi aponta para Cristo ao vencer Golias?",
+                        points: [
+                            "O medo do povo revela nossa incapacidade diante do inimigo (v.1-11)",
+                            "O enviado de Deus prefigura Cristo, nosso representante (v.12-40)",
+                            "A vitória do ungido de Deus é a vitória do povo (v.41-50)"
+                        ],
+                        application: "Não somos Davi, mas o povo acuado; Cristo é nosso Davi que venceu. Nossa fé está na obra consumada de Cristo."
+                    },
+                    {
+                        title: "2 Reis 5:1-19 | Naamã e a cura da lepra",
+                        theme: "Cristo, o verdadeiro rio de purificação",
+                        ict: "Deus curou Naamã da lepra por meio da obediência à Palavra, apontando para a purificação definitiva em Cristo.",
+                        thesis: "Deus purificará todo pecador que crê e se submete a Cristo, a única fonte de limpeza e salvação.",
+                        purpose: "Levar os ouvintes a buscar purificação em Cristo, pela fé e não por obras.",
+                        question: "Como a cura de Naamã aponta para Cristo, o único que purifica?",
+                        points: [
+                            "A lepra revela a condição universal do pecado (v.1-7)",
+                            "O profeta aponta para Cristo, que fala com autoridade e graça (v.8-14)",
+                            "A nova vida resulta do encontro com o Deus verdadeiro (v.15-19)"
+                        ],
+                        application: "Só Cristo limpa do pecado; não há outro nome. Humildade para receber a graça; rejeição do orgulho religioso."
+                    },
+                    {
+                        title: "Rute 1:1-22 | Da Amargura à Esperança em Cristo",
+                        theme: "Cristo, o Redentor que restaura esperança",
+                        ict: "Deus restaurou Noemi e Rute através da promessa messiânica, apontando para Cristo como nosso Redentor e restaurador.",
+                        thesis: "Deus restaurará toda esperança por meio de Cristo, o Redentor prometido, que acolhe os quebrantados e os estrangeiros.",
+                        purpose: "Levar os ouvintes a recomeçar em Cristo, confiando que Nele toda dor é transformada em esperança.",
+                        question: "Como Rute e Noemi apontam para Cristo, o restaurador de nossa esperança?",
+                        points: [
+                            "A amargura da perda aponta para a necessidade de redenção (v.1-5)",
+                            "A fidelidade de Rute antecipa o amor redentor de Cristo (v.6-18)",
+                            "O recomeço em Belém anuncia o nascimento do Redentor (v.19-22)"
+                        ],
+                        application: "Só Cristo pode transformar Mara em Noemi, amargura em esperança. Acolha a graça do Redentor: mesmo estrangeiros, somos feitos família de Deus em Cristo."
+                    }
+                ]
+            },
+            evangelhos: {
+                title: "Evangelhos",
+                icon: "fas fa-dove",
+                sermons: [
+                    {
+                        title: "Marcos 2:1-12 | O Paralítico de Cafarnaum",
+                        theme: "Cristo, o Salvador que perdoa e restaura",
+                        ict: "Jesus demonstrou seu poder divino perdoando pecados e curando o paralítico, revelando-se o verdadeiro Deus presente entre nós.",
+                        thesis: "Jesus demonstrará seu poder divino ao perdoar e restaurar todo aquele que vem a Ele em fé.",
+                        purpose: "Levar os ouvintes a buscar, em Cristo, o perdão e a restauração integral.",
+                        question: "Como Jesus revelou seu poder salvador neste encontro?",
+                        points: [
+                            "A necessidade espiritual mais profunda: o perdão em Cristo (v.1-5)",
+                            "A autoridade de Cristo sobre o pecado e sobre a enfermidade (v.6-11)",
+                            "A nova vida que surge do encontro com Cristo (v.12)"
+                        ],
+                        application: "Precisamos de perdão antes de qualquer bênção exterior. Não existe caso impossível para Cristo. Busque a Jesus acima de tudo."
+                    },
+                    {
+                        title: "João 6:35-40 | O Pão da Vida",
+                        theme: "Cristo, o Pão da Vida que satisfaz eternamente",
+                        ict: "Jesus revelou-se como o Pão da Vida, prometendo vida eterna e satisfação plena a todos os que creem nEle.",
+                        thesis: "Jesus se revelará como Pão da Vida a todo aquele que crer, sustentando e satisfazendo plenamente seus filhos.",
+                        purpose: "Chamar os ouvintes a crer em Jesus como única fonte de vida e satisfação.",
+                        question: "O que significa receber Jesus como Pão da Vida?",
+                        points: [
+                            "A fome insaciável da humanidade e a promessa de Cristo (v.35)",
+                            "A oferta gratuita da vida eterna em Cristo (v.36-37)",
+                            "A segurança e perseverança que só Cristo oferece (v.38-40)"
+                        ],
+                        application: "O mundo oferece 'pães' que não satisfazem; só Cristo preenche e sustenta. A salvação em Cristo é segura e irrevogável."
+                    },
+                    {
+                        title: "Mateus 8:23-27 | Jesus acalma a tempestade",
+                        theme: "Cristo, o Senhor da tempestade",
+                        ict: "Jesus revelou sua divindade e soberania ao acalmar o mar, mostrando que tem poder absoluto sobre o caos e o medo.",
+                        thesis: "Jesus continuará revelando seu poder sobre toda tempestade àqueles que confiam Nele.",
+                        purpose: "Encorajar os ouvintes a confiar em Cristo no meio das tempestades da vida, reconhecendo sua soberania.",
+                        question: "Como Cristo se revela Senhor em meio às tempestades?",
+                        points: [
+                            "O medo e o desespero diante do caos (v.23-25)",
+                            "A presença e a repreensão de Cristo à fé pequena (v.26a)",
+                            "O poder de Cristo que domina as forças do caos (v.26b-27)"
+                        ],
+                        application: "Sua segurança não está na ausência de tempestades, mas na presença de Cristo. A fé verdadeira repousa em quem Cristo é, não no que sentimos ou vemos."
+                    },
+                    {
+                        title: "João 11:17-27 | A Ressurreição e a Vida",
+                        theme: "Cristo, a Ressurreição e a Vida",
+                        ict: "Jesus se revelou como a Ressurreição e a Vida, oferecendo vida eterna e vitória sobre a morte àqueles que Nele creem.",
+                        thesis: "Cristo continuará sendo a Ressurreição e a Vida para todo aquele que crê, concedendo esperança até diante da morte.",
+                        purpose: "Conduzir os ouvintes a crer em Jesus como única esperança diante da morte e do sofrimento.",
+                        question: "O que significa crer em Cristo como a Ressurreição e a Vida?",
+                        points: [
+                            "A dor e o limite da morte na experiência humana (v.17-21)",
+                            "A promessa de vida feita por Cristo (v.22-26)",
+                            "A fé pessoal que se rende a Cristo (v.27)"
+                        ],
+                        application: "O sofrimento e a morte não têm a palavra final: Cristo venceu! O consolo e a esperança estão em Jesus, o Ressuscitado."
+                    },
+                    {
+                        title: "Lucas 19:1-10 | Zaqueu e o Encontro com Cristo",
+                        theme: "Cristo, o Salvador dos rejeitados",
+                        ict: "Jesus buscou e salvou Zaqueu, revelando-se como o Messias que veio resgatar os perdidos e transformar vidas.",
+                        thesis: "Cristo buscará e salvará todo aquele que se encontra perdido e excluído, trazendo nova vida e aceitação.",
+                        purpose: "Levar ouvintes a crer que Cristo se importa, busca e transforma até o mais rejeitado.",
+                        question: "Como Cristo salva e transforma os rejeitados?",
+                        points: [
+                            "O vazio e a busca do coração perdido (v.1-4)",
+                            "O olhar e o chamado pessoal de Cristo (v.5-7)",
+                            "A transformação e o fruto do encontro com Cristo (v.8-10)"
+                        ],
+                        application: "Cristo não rejeita ninguém que O busca – Ele veio “buscar e salvar o que se havia perdido”. O Evangelho restaura dignidade, alegria e sentido."
+                    }
+                ]
+            },
+            epistolas: {
+                title: "Epístolas",
+                icon: "fas fa-feather-pointed",
+                sermons: [
+                    {
+                        title: "Romanos 5:1-11 | Justificados em Cristo",
+                        theme: "Cristo, nossa Paz e Esperança",
+                        ict: "Deus nos declarou justos por meio de Cristo, garantindo paz com Ele, alegria na esperança e reconciliação total.",
+                        thesis: "Cristo continuará sendo a fonte da nossa paz, alegria e reconciliação com Deus, sustentando-nos em todas as tribulações.",
+                        purpose: "Levar ouvintes a confiar somente em Cristo para justificação, paz e esperança diante das aflições.",
+                        question: "O que recebemos em Cristo, nossa justificação?",
+                        points: [
+                            "A paz com Deus por meio de Cristo (v.1-2)",
+                            "A alegria nas tribulações por causa de Cristo (v.3-5)",
+                            "O amor que nos salvou e nos reconcilia (v.6-11)"
+                        ],
+                        application: "Pare de buscar paz em obras ou sentimentos: descanse na justiça de Cristo. Só em Cristo, o sofrimento tem sentido e propósito."
+                    },
+                    {
+                        title: "Efésios 2:1-10 | Salvos pela Graça em Cristo",
+                        theme: "Cristo, o Dom da Graça Salvadora",
+                        ict: "Deus nos vivificou em Cristo, salvando-nos do pecado e criando-nos para boas obras em sua graça.",
+                        thesis: "Cristo continuará nos salvando pela graça, transformando vidas e produzindo boas obras para sua glória.",
+                        purpose: "Levar a igreja a rejeitar autossuficiência e receber pela fé a graça transformadora de Cristo.",
+                        question: "O que significa ser salvo pela graça em Cristo?",
+                        points: [
+                            "Nossa morte e incapacidade sem Cristo (v.1-3)",
+                            "A riqueza do amor e da graça de Deus em Cristo (v.4-7)",
+                            "A nova criação em Cristo para boas obras (v.8-10)"
+                        ],
+                        application: "Nossa salvação depende inteiramente do que Cristo fez, não do que fazemos. Receba a graça e permita que Cristo produza frutos em sua vida."
+                    },
+                    {
+                        title: "Filipenses 2:5-11 | A Humildade de Cristo",
+                        theme: "Cristo, o Senhor Humilde e Exaltado",
+                        ict: "Cristo se humilhou tornando-se servo e obedecendo até a morte, sendo exaltado como Senhor sobre tudo e todos.",
+                        thesis: "Cristo será exaltado eternamente, e todo joelho se dobrará diante dele, o Senhor glorificado.",
+                        purpose: "Convidar a igreja a imitar a humildade de Cristo, servindo e adorando-o como Senhor supremo.",
+                        question: "Como a humildade e exaltação de Cristo transformam nossa vida?",
+                        points: [
+                            "O exemplo supremo da humildade de Cristo (v.5-8)",
+                            "A exaltação única de Cristo como Senhor universal (v.9-11)",
+                            "O chamado à imitação e adoração de Cristo"
+                        ],
+                        application: "Humilhe-se diante do Cristo que se humilhou por você. Sirva ao próximo como expressão do caráter de Cristo. Confesse e adore Jesus como Senhor de tudo."
+                    },
+                    {
+                        title: "2 Coríntios 5:14-21 | A Nova Vida em Cristo",
+                        theme: "Cristo, o Reconciliador e Transformador",
+                        ict: "Cristo morreu e ressuscitou para nos tornar novas criaturas e ministros da reconciliação.",
+                        thesis: "Cristo continuará reconciliando, transformando vidas e nos fazendo embaixadores do seu Evangelho.",
+                        purpose: "Chamar a igreja a viver a nova identidade em Cristo e a proclamar a reconciliação.",
+                        question: "O que significa viver como nova criatura em Cristo?",
+                        points: [
+                            "O amor de Cristo que nos controla (v.14-15)",
+                            "A nova criação por meio da reconciliação em Cristo (v.16-19)",
+                            "O chamado a sermos embaixadores de Cristo (v.20-21)"
+                        ],
+                        application: "Não há passado que Cristo não possa redimir. Viva como representante do Reino, testemunhando Cristo em palavra e ação."
+                    },
+                    {
+                        title: "Hebreus 4:14-16 | Cristo, o Sumo Sacerdote Perfeito",
+                        theme: "Cristo, nosso Sumo Sacerdote Compassivo",
+                        ict: "Cristo, o Filho de Deus, foi tentado em tudo, mas sem pecado, oferecendo-nos acesso livre e graça em toda necessidade.",
+                        thesis: "Cristo continuará intercedendo e sustentando seu povo, oferecendo graça abundante e compaixão perfeita.",
+                        purpose: "Convidar os ouvintes a buscar auxílio e graça junto a Cristo, nosso Sumo Sacerdote sempre acessível.",
+                        question: "O que Cristo faz como nosso Sumo Sacerdote?",
+                        points: [
+                            "Cristo, o Sumo Sacerdote que venceu todas as tentações (v.14-15)",
+                            "A confiança para se aproximar do trono da graça (v.16a)",
+                            "O socorro oportuno que só Cristo pode oferecer (v.16b)"
+                        ],
+                        application: "Não há tentação ou fraqueza que Cristo não compreenda. Em toda luta, corra para Cristo, não para o isolamento ou culpa."
+                    }
+                ]
+            },
+            poeticos: {
+                title: "Poéticos",
+                icon: "fas fa-music",
+                sermons: [
+                    {
+                        title: "Salmo 23 | Cristo, o Bom Pastor",
+                        theme: "Cristo, o Bom Pastor que guia, supre e protege",
+                        ict: "O Senhor revelou-se como o Pastor que conduz, sustenta e protege seu povo, apontando para Cristo, o Bom Pastor.",
+                        thesis: "Cristo continuará guiando, sustentando e protegendo seu rebanho até a eternidade.",
+                        purpose: "Levar os ouvintes a confiar no cuidado constante de Cristo, o Bom Pastor.",
+                        question: "Como Cristo se revela como o Bom Pastor no Salmo 23?",
+                        points: [
+                            "Cristo supre plenamente suas ovelhas (v.1-3)",
+                            "Cristo protege mesmo nos vales escuros (v.4)",
+                            "Cristo prepara mesa e promete comunhão eterna (v.5-6)"
+                        ],
+                        application: "Dependa do Bom Pastor em todas as estações da vida. Não temas o vale: Cristo já passou pelo vale da morte e ressuscitou."
+                    },
+                    {
+                        title: "Salmo 51:1-13 | Cristo, o Perdão do Pecador",
+                        theme: "Cristo, o Cordeiro que purifica o coração",
+                        ict: "Deus ofereceu perdão ao pecador arrependido, apontando para Cristo, o único que pode purificar totalmente.",
+                        thesis: "Cristo continuará concedendo perdão e restauração àqueles que a Ele recorrem com arrependimento sincero.",
+                        purpose: "Convidar a igreja ao arrependimento sincero e à confiança no perdão total de Cristo.",
+                        question: "Como Cristo perdoa e restaura o pecador no Salmo 51?",
+                        points: [
+                            "O reconhecimento da necessidade do Cordeiro (v.1-4)",
+                            "O desejo de purificação total em Cristo (v.5-9)",
+                            "A alegria e missão restauradas por Cristo (v.10-13)"
+                        ],
+                        application: "Não fuja do pecado: corra para Cristo, o único capaz de purificar. Receba nova vida: não há culpa maior que o sangue de Jesus."
+                    },
+                    {
+                        title: "Salmo 42 | Cristo, a Esperança do Coração Sedento",
+                        theme: "Cristo, a Água Viva para a alma aflita",
+                        ict: "O salmista revelou sede por Deus, esperança no meio do abatimento, apontando para Cristo, a fonte de toda esperança.",
+                        thesis: "Cristo continuará saciando e restaurando o coração aflito, dando esperança em meio às crises.",
+                        purpose: "Encorajar ouvintes a buscar em Cristo a satisfação e esperança para toda sede da alma.",
+                        question: "Como Cristo responde à sede e à aflição do coração?",
+                        points: [
+                            "A alma sedenta clama por Deus, sua única esperança (v.1-4)",
+                            "Cristo é presença e consolo em meio ao abatimento (v.5-8)",
+                            "A esperança renovada na promessa de Cristo (v.9-11)"
+                        ],
+                        application: "Traga seu desespero e sede a Jesus, fonte inesgotável. A esperança não é circunstancial, mas fundamentada no caráter de Cristo."
+                    },
+                    {
+                        title: "Salmo 130 | Cristo, o Resgate para os que esperam",
+                        theme: "Cristo, a Redenção que vem do profundo",
+                        ict: "O clamor do salmista por perdão e redenção aponta para Cristo, que resgata e perdoa plenamente.",
+                        thesis: "Cristo continuará resgatando todos que esperam nEle, concedendo perdão e redenção perfeita.",
+                        purpose: "Chamar ouvintes à esperança e ao clamor por redenção em Cristo.",
+                        question: "Como Cristo responde ao clamor do coração no abismo?",
+                        points: [
+                            "O clamor desesperado por perdão só encontra resposta em Cristo (v.1-4)",
+                            "A esperança ativa enquanto se espera pelo Redentor (v.5-6)",
+                            "A redenção plena realizada por Cristo (v.7-8)"
+                        ],
+                        application: "Clame a Jesus do fundo do seu abismo – Ele não rejeita. Espere com fé: Cristo já veio e voltará."
+                    },
+                    {
+                        title: "Salmo 110 | Cristo, o Rei e Sacerdote Eterno",
+                        theme: "Cristo, o Soberano entronizado para sempre",
+                        ict: "O Senhor prometeu um Rei e Sacerdote eterno, cumprindo plenamente em Cristo, exaltado à destra do Pai.",
+                        thesis: "Cristo continuará reinando e intercedendo como Rei e Sacerdote perfeito para o seu povo.",
+                        purpose: "Levar a igreja a adorar e confiar na soberania e intercessão contínua de Cristo.",
+                        question: "O que significa servir a Cristo, nosso Rei e Sacerdote eterno?",
+                        points: [
+                            "Cristo entronizado à direita do Pai (v.1-2)",
+                            "Cristo sacerdote para sempre, segundo a ordem de Melquisedeque (v.3-4)",
+                            "Cristo, Juiz e vencedor absoluto dos inimigos (v.5-7)"
+                        ],
+                        application: "Submeta-se e adore a Cristo, Rei soberano. Confie: Ele intercede sempre por nós e reinará eternamente."
+                    }
+                ]
+            },
+            profeticos: {
+                title: "Proféticos",
+                icon: "fas fa-bullhorn",
+                sermons: [
+                    {
+                        title: "Isaías 53:1-12 | O Servo Sofredor",
+                        theme: "Cristo, o Servo Sofredor que salva e justifica",
+                        ict: "Deus anunciou e realizou a salvação prometida por meio do Servo sofredor, Cristo, que levou nossos pecados e nos justificou.",
+                        thesis: "Cristo continuará salvando e justificando todo aquele que crê, pois Ele levou sobre si nossas dores e iniquidades.",
+                        purpose: "Levar ouvintes a se renderem à obra redentora de Cristo, confiando Nele como o único Salvador.",
+                        question: "Como Isaías 53 revela a obra redentora de Cristo?",
+                        points: [
+                            "Cristo rejeitado e desprezado por nós (v.1-3)",
+                            "Cristo levou nossas dores e morreu por nossos pecados (v.4-9)",
+                            "Cristo triunfa e justifica muitos (v.10-12)"
+                        ],
+                        application: "Reconheça a profundidade do amor sacrificial de Cristo. Não confie em justiça própria; receba a justificação do Servo sofredor."
+                    },
+                     {
+                        title: "Jeremias 31:31-34 | A Nova Aliança em Cristo",
+                        theme: "Cristo, o Mediador da Nova Aliança",
+                        ict: "Deus prometeu uma Nova Aliança, cumprida em Cristo, que perdoa pecados e escreve sua lei em nosso coração.",
+                        thesis: "Cristo continuará sendo o mediador da Nova Aliança, renovando, perdoando e transformando corações.",
+                        purpose: "Convidar a igreja a viver em comunhão com Cristo, experimentando o perdão e a renovação da Nova Aliança.",
+                        question: "O que a Nova Aliança em Cristo oferece ao povo de Deus?",
+                        points: [
+                            "Cristo estabelece uma relação íntima e definitiva com seu povo (v.31-32)",
+                            "Cristo grava sua lei em nossos corações (v.33)",
+                            "Cristo concede perdão pleno e eterno (v.34)"
+                        ],
+                        application: "Viva com gratidão e liberdade: a Nova Aliança é dom de Cristo. Descanse: o perdão em Cristo é completo, eterno e seguro."
+                    },
+                    {
+                        title: "Ezequiel 36:24-28 | O Novo Coração em Cristo",
+                        theme: "Cristo, o Doador do Novo Coração e do Espírito",
+                        ict: "Deus prometeu, em Cristo, purificar, dar novo coração e o Espírito para que o seu povo viva em obediência.",
+                        thesis: "Cristo continuará purificando e renovando seu povo, dando-lhe novo coração e Seu Espírito para vida santa.",
+                        purpose: "Convidar ouvintes a receber o novo coração e viver pelo Espírito de Cristo.",
+                        question: "O que Cristo realiza ao dar um novo coração ao seu povo?",
+                        points: [
+                            "Cristo purifica do pecado todo aquele que crê (v.24-25)",
+                            "Cristo concede novo coração e nova disposição interior (v.26)",
+                            "Cristo coloca seu Espírito em nós, capacitando para obediência (v.27-28)"
+                        ],
+                        application: "Não tente mudar por fora; receba o milagre interior do novo coração em Cristo. Dependa diariamente do Espírito para vencer o pecado."
+                    },
+                    {
+                        title: "Daniel 7:13-14 | O Filho do Homem Exaltado",
+                        theme: "Cristo, o Filho do Homem que recebe domínio eterno",
+                        ict: "Deus revelou a vinda do Filho do Homem, Cristo, a quem deu domínio, glória e reino eternos.",
+                        thesis: "Cristo continuará reinando soberanamente, conduzindo a história até o triunfo final de seu Reino.",
+                        purpose: "Levar a igreja a adorar e esperar confiante no reinado absoluto de Cristo.",
+                        question: "O que significa servir a Cristo, o Filho do Homem exaltado?",
+                        points: [
+                            "Cristo é o Filho do Homem prometido, Deus e homem perfeito (v.13)",
+                            "Cristo recebe domínio, glória e reino eternos do Pai (v.14a)",
+                            "Cristo possui um reino universal, invencível e eterno (v.14b)"
+                        ],
+                        application: "Não tema o futuro: Cristo governa sobre tudo, inclusive sobre o mal e a injustiça. Viva como cidadão do Reino: esperança, fidelidade e missão."
+                    },
+                    {
+                        title: "Miqueias 5:1-5a | O Rei nascido em Belém",
+                        theme: "Cristo, o Pastor-Rei vindo de Belém",
+                        ict: "Deus prometeu um governante vindo de Belém, cumprido em Cristo, o Rei humilde e Pastor do seu povo.",
+                        thesis: "Cristo continuará apascentando e governando seu povo com paz e segurança eternas.",
+                        purpose: "Levar ouvintes a confiar no governo e cuidado de Cristo, o Pastor-Rei prometido.",
+                        question: "Como a promessa de Miqueias encontra cumprimento em Cristo?",
+                        points: [
+                            "Cristo é o Rei esperado, vindo humildemente de Belém (v.1-2)",
+                            "Cristo governa e apascenta com força e ternura (v.3-4)",
+                            "Cristo é a nossa paz em meio ao caos (v.5a)"
+                        ],
+                        application: "Confie em Cristo como Rei e Pastor, mesmo em dias de fraqueza ou ameaça. Deixe-se pastorear, consolar e governar por Jesus."
+                    }
+                ]
+            }
+        };
+
+        let currentCategory = 'introducao';
+
+        function renderNavigation() {
+            const desktopNav = document.getElementById('desktop-nav');
+            const mobileNav = document.getElementById('mobile-nav');
+            let navHTML = '';
+
+            for (const key in sermonData) {
+                const category = sermonData[key];
+                navHTML += `
+                    <button onclick="showCategory('${key}')" 
+                            class="nav-button w-full text-left p-4 rounded-lg flex items-center space-x-4 text-primary-dark ${currentCategory === key ? 'nav-active' : ''}">
+                        <i class="${category.icon} text-xl text-accent-gold w-6 text-center"></i>
+                        <span class="font-semibold">${category.title}</span>
+                    </button>
+                `;
+            }
+            desktopNav.innerHTML = navHTML;
+            mobileNav.innerHTML = navHTML;
+        }
+
+        function createSermonCard(sermon) {
+            return `
+                <div class="sermon-card rounded-xl p-6 mb-6">
+                    <h3 class="text-2xl font-bold text-primary-dark mb-2">${sermon.title}</h3>
+                    <p class="text-accent-gold font-semibold mb-4">${sermon.theme}</p>
+                    
+                    <div class="space-y-3 text-sm">
+                        <p><strong>ICT:</strong> <span class="italic">${sermon.ict}</span></p>
+                        <p><strong>Tese:</strong> <span class="italic">${sermon.thesis}</span></p>
+                        <p><strong>Propósito:</strong> ${sermon.purpose}</p>
+                        <p><strong>Pergunta Condutora:</strong> ${sermon.question}</p>
+                    </div>
+
+                    <hr class="my-4 border-gray-200">
+
+                    <div>
+                        <h4 class="font-bold mb-2 text-primary-dark">Divisões Principais:</h4>
+                        <ul class="list-decimal list-inside space-y-2 pl-2 text-sm">
+                            ${sermon.points.map(point => `<li>${point}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <hr class="my-4 border-gray-200">
+                    
+                    <div>
+                        <h4 class="font-bold mb-2 text-primary-dark">Aplicação Cristocêntrica:</h4>
+                        <p class="text-sm italic bg-accent-gold/10 p-3 rounded-md">${sermon.application}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showCategory(categoryKey) {
+            currentCategory = categoryKey;
+            const category = sermonData[categoryKey];
+            const contentDiv = document.getElementById('content');
+            
+            contentDiv.classList.remove('fade-in');
+            void contentDiv.offsetWidth; // Trigger reflow
+
+            let contentHTML = '';
+            if (categoryKey === 'introducao') {
+                contentHTML = category.content;
+            } else {
+                contentHTML = `
+                    <h2 class="text-3xl font-bold text-primary-dark mb-6 flex items-center">
+                        <i class="${category.icon} mr-4 text-accent-gold"></i>
+                        Esboços de ${category.title}
+                    </h2>
+                    ${category.sermons.map(createSermonCard).join('')}
+                `;
+            }
+            
+            contentDiv.innerHTML = contentHTML;
+            contentDiv.classList.add('fade-in');
+
+            renderNavigation();
+            if (document.querySelector('.mobile-menu').classList.contains('open')) {
+                toggleMobileMenu(); // Close menu on selection only if it's open
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.querySelector('.mobile-menu').classList.toggle('open');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderNavigation();
+            showCategory('introducao');
+        });
+    </script>
+</body>
+</html>
